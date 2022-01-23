@@ -1,8 +1,4 @@
-import random
 import time
-import webbrowser
-
-import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -54,8 +50,6 @@ def navigateToQuizzes(driver, quizName):
 
 
 def getCrowns():
-    print("start of browser")
-
     driver = webdriver.Chrome(r"chromedriver")
     driver.get(WIZURL)
     print()
@@ -81,7 +75,7 @@ def getCrowns():
         # Solving quizzes
         for questionNumber in range(12):
             content = driver.page_source
-            soup = BeautifulSoup(content, 'lxml')
+            soup = BeautifulSoup(content)
             answerQuizQuestion(soup, driver, QuizAnswers.ArrayOfDictionaries[quizNumber])
 
         # Starting a new quiz (I need to first click claim button and get the captcha right)
@@ -117,7 +111,6 @@ def answerQuizQuestion(soup, driver, dictionary):
         if webQuestion.__contains__(quizQuestion):
             print("answer found: " + quizQuestion)
             answer = dictionary[quizQuestion]
-            print("answer is: " + answer)
             break
 
     # Keeping an array of all the buttons to find the right one
@@ -126,7 +119,6 @@ def answerQuizQuestion(soup, driver, dictionary):
     # Looping through the options
     for webAnswer in soup.find_all('span', attrs={'class': 'answerText'}):
         answerButton = allButtons[checkBox]
-        print(allButtons[checkBox])
         if checkBox < 3:
             checkBox += 1
 
@@ -142,12 +134,11 @@ def answerQuizQuestion(soup, driver, dictionary):
     # Moving on to the next question
     try:
         nextQuestionButton = driver.find_element(By.ID, "nextQuestion")
-        print("About to click next question button")
         nextQuestionButton.click()
     except:
         print("failed to find next question button")
 
-# Press the green button in the gutter to run the script.
+
 if __name__ == '__main__':
     getCrowns()
 

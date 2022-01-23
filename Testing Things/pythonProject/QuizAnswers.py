@@ -20,7 +20,7 @@ ArrayOfDictionaries = [{
         'Which of these animals was considered sacred by Ancient Egyptians?': 'Cat',
         'Who is considered to be the first Pharaoh of Egypt?': 'King Menes',
         'Who is considered to be the most important Egyptian god?': 'Ra',
-        'Which of the following was not invented by the Ancient Egyptians?': 'Horse saddles'
+        'Which of the following was not invented by the Ancient Egyptians?': 'Horse Saddles'
         },
         {  # Early American History
         '11 Southern states succeeded from the union in 1860 to form the _________ States of America.': 'Confederate',
@@ -56,7 +56,9 @@ ArrayOfDictionaries = [{
                 'spent over 20 years in jail',
         'Thomas Jefferson wrote which famous US document?': 'The Declaration of Independence',
         'What was Julius Caesar\'s motto?': 'I came, I saw, I conquered',
-        'Who was Margaret Thatcher?': 'British Prime Minister'
+        'Who was Margaret Thatcher?': 'British Prime Minister',
+        'King Henry VIII wanted to remarry, which contributed to the creation of which religion?':
+                'The Church of England'
         },
         {  # Greek Mythology Trivia
         'Which Greek god is the god of fertility and wine?': 'Dionysus',
@@ -99,7 +101,10 @@ ArrayOfDictionaries = [{
         'Who was the wife of Thor and goddess of the harvest?': 'Sif',
         'Who was the goddess of the sea?': 'Ran',
         'Norse Mythology is the mythology from what group of people?': 'North Germanic',
-        'Who was the goddess of spring?': 'Eostre'
+        'Who was the goddess of spring?': 'Eostre',
+        'Who was the god of thunder and battle?': 'Thor',
+        'Who was Odin\'s father?': 'Borr',
+        'Who was the goddess of night?': 'Nott'
         },
         {  # Solar Systems Trivia
         'Every object in our solar system revolves around the _______.': 'Sun',
@@ -161,7 +166,7 @@ ArrayOfDictionaries = [{
         'Where do tornadoes come from?': 'Thunderstorms',
         'Which of the following is not a characteristic of a hurricane?': 'Forms over mountains',
         'Which of the following is NOT needed to cause a blizzard?': 'Rotating storm clouds',
-        'Which of these states are not in "Tornado Alley"': 'North Carolina'
+        'Which of these states are not in "Tornado Alley"?': 'North Carolina'
         },
         {  # Apollo Missions Trivia
         'In which mission did an astronaut perform a golf shot on the moon?': 'Apollo 14',
