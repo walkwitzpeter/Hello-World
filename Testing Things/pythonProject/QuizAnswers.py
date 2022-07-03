@@ -36,7 +36,7 @@ ArrayOfDictionaries = [{
         'What year was the Declaration of Independence signed?': '1776',
         'Where was President Abraham Lincoln assassinated?': 'The Theatre',
         'Which early tax act made American settlers very angry pre-revolution?': 'Stamp Act of 1765',
-        'Which natural resource was a large reason many Americans choose to journey westward in the 1800\'s?':'Gold',
+        'Which natural resource was a large reason many Americans choose to journey westward in the 1800\'s?': 'Gold',
         'Which two amendments make up the Reconstruction Acts of 1867 and give African Americans additional freedoms?':
                 'Fourteenth and Fifteenth',
         'Who did the United States purchase Alaska from?': 'Russia'
@@ -104,7 +104,11 @@ ArrayOfDictionaries = [{
         'Who was the goddess of spring?': 'Eostre',
         'Who was the god of thunder and battle?': 'Thor',
         'Who was Odin\'s father?': 'Borr',
-        'Who was the goddess of night?': 'Nott'
+        'Who was the goddess of night?': 'Nott',
+        'Who was the god of mischief?': 'Loki',
+        'Who was the god of poetry, music and the harp?': 'Bragi',
+        'Who was the goddess of old age?': 'Elli',
+        'Who was the goddess of joy and peace?': 'Nanna'
         },
         {  # Solar Systems Trivia
         'Every object in our solar system revolves around the _______.': 'Sun',
@@ -166,13 +170,13 @@ ArrayOfDictionaries = [{
         'Where do tornadoes come from?': 'Thunderstorms',
         'Which of the following is not a characteristic of a hurricane?': 'Forms over mountains',
         'Which of the following is NOT needed to cause a blizzard?': 'Rotating storm clouds',
-        'Which of these states are not in "Tornado Alley"?': 'North Carolina'
+        'Which of these states are not in "Tornado Alley"?': 'North Carolina',
+        'Tornadoes are rated on what kind of scale?': 'F Scale'
         },
         {  # Apollo Missions Trivia
         'In which mission did an astronaut perform a golf shot on the moon?': 'Apollo 14',
-        'This Apollo mission never launched and ended in tragedy, when a fire erupted in the command module during'
-        ' a test and killed three astronauts.':
-                'Apollo 1',
+        'This Apollo mission never launched and ended in tragedy, when a fire erupted in the command module during '
+        'a test and killed three astronauts.': 'Apollo 1',
         'Which astronaut was not present on the Apollo 11 mission?': 'Cernan',
         'Which mission cancelled their landing on the moon due to technical problems?': 'Apollo 13',
         'Which mission conducted the first manned flight test of the Lunar Module?': 'Apollo 9',

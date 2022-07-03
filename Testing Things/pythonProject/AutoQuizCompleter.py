@@ -1,10 +1,16 @@
 import time
+
 from bs4 import BeautifulSoup
+from playsound import playsound
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+
 import QuizAnswers
+import QuizLinks
+
 """ 
-I DON'T PROMISE THE SECURITY OF THIS PROGRAM!!!!!!
+I DON'T PROMISE THE SECURITY OF THIS PROGRAM OR THAT YOU WONT BE BANNED
 
 However if you still want to use it, enter your username and password below.
 This program should complete 10 quizzes for you, 
@@ -12,21 +18,26 @@ This program should complete 10 quizzes for you,
  After you answer the captcha you will need to enter a user input into the program
  (I run the program in PyCharm and so I just enter it in the PyCharm terminal)
 
-Sorry I still am very new at this and don't know how to get it to auto answer the captcha,
- and much of my code is still pretty messy
+This was written for myself so it is very messy and not always easy to figure out where
+ it fails. But it works perfect for me, so write one yourself to practice if this doesn't
+ work for you!
+ 
+I got the free sound from the following website
+https://www.dreamstime.com/demonqten_info (Nkolay Smirnov - is the author)
  
 Things that stop it from working:
     Having already completed one quiz today (especially one of the quizzes on here)
     Navigating to a different part of the website at any point (except for clicking the captcha)
 
 Author: Peter Walkwitz
-Date Last Modified: (1/21/2022)
+Date Last Modified: (7/3/2022)
 """
-import QuizLinks
 
-USERNAME = "your username"
-PASSWORD = "your password"
-WIZURL = "https://www.wizard101.com/game/"
+USERNAME = "Username"
+PASSWORD = "Password"
+WIZURL = "https://www.wizard101.com/game"
+# Starts at 0 not 1
+STARTING_QUIZ = 0
 
 tenTriviaNames = ['Ancient Egypt Trivia', 'Early American History Trivia', 'Famous World Leaders',
                   'Greek Mythology Trivia', 'Norse Mythology Trivia', 'Solar System Trivia', 'State Nicknames Trivia',
@@ -50,7 +61,7 @@ def navigateToQuizzes(driver, quizName):
 
 
 def getCrowns():
-    driver = webdriver.Chrome(r"chromedriver")
+    driver = webdriver.Chrome(ChromeDriverManager().install())
     driver.get(WIZURL)
     print()
 
@@ -68,39 +79,44 @@ def getCrowns():
     except:
         print("failed to find login")
 
-    for quizNumber in range(10):
+    for quizNumber in range(STARTING_QUIZ, 10):
         quizName = tenTriviaNames[quizNumber]
         navigateToQuizzes(driver, quizName)
 
         # Solving quizzes
         for questionNumber in range(12):
-            content = driver.page_source
-            soup = BeautifulSoup(content)
-            answerQuizQuestion(soup, driver, QuizAnswers.ArrayOfDictionaries[quizNumber])
+            try:
+                content = driver.page_source
+                soup = BeautifulSoup(content)
+                answerQuizQuestion(soup, driver, QuizAnswers.ArrayOfDictionaries[quizNumber])
+            # In case the connection drops, trys to refresh the page and keep it going
+            except AttributeError:
+                driver.refresh()
+                questionNumber -= 1
 
-        # Starting a new quiz (I need to first click claim button and get the captcha right)
+        # Claiming the crowns
         claimRewardButton = driver.find_element(By.CLASS_NAME, "kiaccountsbuttongreen")
         claimRewardButton.click()
-        # I might need to re-grab the content here to get the captcha solved
-        # TODO this is what is breaking (i am currently manually doing the captcha)
-        time.sleep(1)
+
         # Adding a user input here because we need to know that they clicked the captcha
+        playsound("DoneDing.mp3")
         userInput = input("Clicked Captcha?")
+
         # Taking another quiz
         takeAnotherQuizButton = driver.find_element(By.CLASS_NAME, "kiaccountsbuttongreen")
         takeAnotherQuizButton.click()
 
-    done = False
     print("All done!")
+    done = False
     while not done:
         time.sleep(10)
 
 
 def answerQuizQuestion(soup, driver, dictionary):
     # This grabs the quiz question
-    webQuestion = soup.find('div', attrs={'class':'quizQuestion'})
+    webQuestion = soup.find('div', attrs={'class': 'quizQuestion'})
     # Creating a wait time because the answers fade in
-    # TODO I should really change this to (when interactable)
+    # TODO I should probably change this to (when interactable)
     time.sleep(5)
 
     # Creating Answer here, so I can reference outside the for loop
