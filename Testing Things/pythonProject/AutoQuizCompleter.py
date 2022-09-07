@@ -18,7 +18,7 @@ This program should complete 10 quizzes for you,
  After you answer the captcha you will need to enter a user input into the program
  (I run the program in PyCharm and so I just enter it in the PyCharm terminal)
 
-This was written for myself so it is very messy and not always easy to figure out where
+This was written for myself so it is kinda messy and not always easy to figure out where
  it fails. But it works perfect for me, so write one yourself to practice if this doesn't
  work for you!
  
@@ -44,20 +44,9 @@ tenTriviaNames = ['Ancient Egypt Trivia', 'Early American History Trivia', 'Famo
                   'Weather Trivia', 'Apollo Missions Trivia', 'World Capitols Trivia']
 
 
-def navigateToQuizzes(driver, quizName):
-    # This takes you to the Quizzes
-    try:
-        earnCrownsButton = driver.find_element(By.XPATH, "//*[@id='subMenu1_lockOpen']/ul/li/div/a[5]")
-        earnCrownsButton.click()
-        playTriviaButton = driver.find_element(By.XPATH, "//*[@id='img_8ad6a41245d5c0cb01461af1244b1400']")
-        playTriviaButton.click()
-        educationalTriviaButton = driver.find_element(By.LINK_TEXT, "View More Educational Trivia »")
-        educationalTriviaButton.click()
-        # Using my dictionary to get the XPATH to find the right quiz
-        quizButton = driver.find_element(By.XPATH, QuizLinks.QuizLinksDict[quizName])
-        quizButton.click()
-    except:
-        print("failed to get to quiz")
+def checkCaptcha(messageString):
+    playsound("DoneDing.mp3")
+    userInput = input(messageString)
 
 
 def getCrowns():
@@ -76,12 +65,14 @@ def getCrowns():
         # Clicking Login
         login_button = driver.find_element(By.XPATH, "//*[@id='wizardLoginButton']/tbody/tr/td[1]/div/div/input")
         login_button.click()
+        checkCaptcha("Logged In? ")
+
     except:
         print("failed to find login")
 
     for quizNumber in range(STARTING_QUIZ, 10):
         quizName = tenTriviaNames[quizNumber]
-        navigateToQuizzes(driver, quizName)
+        driver.get("https://www.wizard101.com/quiz/trivia/game/" + QuizLinks.QuizLinksDict[quizName])
 
         # Solving quizzes
         for questionNumber in range(12):
@@ -93,14 +84,12 @@ def getCrowns():
             except AttributeError:
                 driver.refresh()
                 questionNumber -= 1
+                print("Question Number: " + questionNumber)
 
         # Claiming the crowns
         claimRewardButton = driver.find_element(By.CLASS_NAME, "kiaccountsbuttongreen")
         claimRewardButton.click()
-
-        # Adding a user input here because we need to know that they clicked the captcha
-        playsound("DoneDing.mp3")
-        userInput = input("Clicked Captcha?")
+        checkCaptcha("Clicked Captcha? ")
 
         # Taking another quiz
         takeAnotherQuizButton = driver.find_element(By.CLASS_NAME, "kiaccountsbuttongreen")

@@ -1,5 +1,3 @@
-
-# WorldCapitolsTriviaDict\
 ArrayOfDictionaries = [{
         # Ancient Egypt Trivia
         'A Pharaoh never let his ______ be seen.': 'Hair',
@@ -214,4 +212,5 @@ ArrayOfDictionaries = [{
         'What is the capital of Japan?': 'Tokyo',
         'What is the capital of Mexico?': 'Mexico City',
         'What is the capital of The Bahamas?': 'Nassau'
-    }]
+        }
+]
