@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 from playsound import playsound
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from webdriver_manager.chrome import ChromeDriverManager
 
 import QuizAnswers
 import QuizLinks
@@ -56,25 +55,32 @@ def checkCaptcha(messageString):
 
 
 def getCrowns(quizNumber=None):
-    driver = webdriver.Chrome(ChromeDriverManager().install())
+    # This needs to be updated when Chrome gets an update
+    # https://chromedriver.chromium.org/downloads
+    # https://googlechromelabs.github.io/chrome-for-testing/
+    driver = webdriver.Chrome('Your\\chromedriver\\Path')
+    # Ex. C:\\Users\\User\\.wdm\\drivers\\chromedriver\\win64\\chromedriver-win64\\chromedriver.exe
     driver.get(WIZURL)
     print()
     print(f'Get Crowns - {quizNumber}')
 
+    success = False
     # Process to Log in
-    try:
+    attempt = 0
+    while not success:
+        attempt += 1
+        print(f'Trying to log in attempt {attempt}')
         # Typing in username and password
+        time.sleep(2)
         username = driver.find_element(By.XPATH, "//*[@id='loginUserName']")
         password = driver.find_element(By.XPATH, "//*[@id='loginPassword']")
         username.send_keys(USERNAME)
         password.send_keys(PASSWORD)
 
         # Clicking Login
-        login_button = driver.find_element(By.XPATH, "//*[@id='wizardLoginButton']/tbody/tr/td[1]/div/div/input")
+        login_button = driver.find_element(By.XPATH, "//*[@id='wizardLoginButton']/div[1]/div/input")
         login_button.click()
-
-    except:
-        input('Failed to login ')
+        success = True
 
     if THREADED:
         solveQuiz(driver, quizNumber),
@@ -82,8 +88,9 @@ def getCrowns(quizNumber=None):
         for quiz in range(10):
             solveQuiz(driver, quiz)
         # Taking another quiz
-        takeAnotherQuizButton = driver.find_element(By.CLASS_NAME, "kiaccountsbuttongreen")
-        takeAnotherQuizButton.click()
+        if not THREADED:
+            takeAnotherQuizButton = driver.find_element(By.CLASS_NAME, "kiaccountsbuttongreen")
+            takeAnotherQuizButton.click()
 
     print("All done!")
 
@@ -94,26 +101,28 @@ def solveQuiz(driver, quizNumber):
 
     # Solving quizzes
     for questionNumber in range(12):
-        try:
-            content = driver.page_source
-            soup = BeautifulSoup(content)
-            answerQuizQuestion(soup, driver, QuizAnswers.ArrayOfDictionaries[quizNumber])
-        # In case the connection drops, trys to refresh the page and keep it going
-        except AttributeError:
-            driver.refresh()
-            questionNumber -= 1
-            print("Question Number: " + str(questionNumber))
-            content = driver.page_source
-            soup = BeautifulSoup(content)
-            answerQuizQuestion(soup, driver, QuizAnswers.ArrayOfDictionaries[quizNumber])
+        success = False
+        while not success:
+            try:
+                content = driver.page_source
+                soup = BeautifulSoup(content)
+                success = answerQuizQuestion(soup, driver, QuizAnswers.ArrayOfDictionaries[quizNumber])
+            # In case the connection drops, trys to refresh the page and keep it going
+            except:
+                driver.refresh()
+                time.sleep(1)
 
-    # Claiming the crowns
-    claimRewardButton = driver.find_element(By.CLASS_NAME, "kiaccountsbuttongreen")
-    claimRewardButton.click()
-    checkCaptcha("Clicked Captcha? ")
+    try:
+        # Claiming the crowns
+        claimRewardButton = driver.find_element(By.CLASS_NAME, "kiaccountsbuttongreen")
+        claimRewardButton.click()
+        checkCaptcha("Clicked Captcha? ")
+    except:
+        input('failed to click claim reward button')
 
 
 def answerQuizQuestion(soup, driver, dictionary):
+    success = False
     # This grabs the quiz question
     webQuestion = soup.find('div', attrs={'class': 'quizQuestion'})
     # Creating a wait time because the answers fade in
@@ -124,7 +133,7 @@ def answerQuizQuestion(soup, driver, dictionary):
 
     # Looping through the dictionary to find the right answer
     for quizQuestion in dictionary:
-        if webQuestion.__contains__(quizQuestion):
+        if quizQuestion in webQuestion:
             if not THREADED:
                 print("Quiz Question: " + quizQuestion)
             answer = dictionary[quizQuestion]
@@ -139,7 +148,7 @@ def answerQuizQuestion(soup, driver, dictionary):
         if checkBox < 3:
             checkBox += 1
 
-        if webAnswer.text.__contains__(answer):
+        if answer in webAnswer.text:
             if not THREADED:
                 print("the real answer is: " + answer)
                 print("finding answer button, webanswer: " + webAnswer.text)
@@ -152,14 +161,16 @@ def answerQuizQuestion(soup, driver, dictionary):
     try:
         nextQuestionButton = driver.find_element(By.ID, "nextQuestion")
         nextQuestionButton.click()
+        success = True
     except:
         print("failed to find next question button")
+    return success
 
 
 if __name__ == '__main__':
 
     if THREADED:
-        for quizNum in range(STARTING_QUIZ, 10):
+        for quizNum in range(0, 10):
             threading.Thread(target=getCrowns, args=(quizNum,), daemon=True).start()
             time.sleep(1)
     else:
